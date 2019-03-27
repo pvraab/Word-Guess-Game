@@ -1,22 +1,50 @@
-// Check for the various File API support.
-if (window.File && window.FileReader && window.FileList && window.Blob) {
-    // Great success! All the File APIs are supported.
-} else {
-    alert('The File APIs are not fully supported in this browser.');
+/* 
+ * When the user clicks on the dropdown button, 
+ * toggle between hiding and showing the dropdown content 
+ */
+function themeFunction() {
+    document.getElementById("themeDropdown").classList.toggle("show");
+    console.log("Here 1");
 }
 
-function handleFileSelect(evt) {
-    var files = evt.target.files; // FileList object
+// Close the dropdown if the user clicks outside of it
+window.onclick = function (event) {
+    console.log("Here 2");
 
-    // files is a FileList of File objects. List some properties.
-    var output = [];
-    for (var i = 0, f; f = files[i]; i++) {
-        output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-            f.size, ' bytes, last modified: ',
-            f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-            '</li>');
+    if (!event.target.matches('.dropbtn')) {
+        console.log("Here 3");
+
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+            console.log("Here 4");
+            var openDropdown = dropdowns[i];
+            console.log(openDropdown);
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
     }
-    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
 }
 
-document.getElementById('files').addEventListener('change', handleFileSelect, false);
+// File read for different themes
+function themeFileRead(theme) {
+    if (theme === "swordPlay") {
+
+    } else if (theme === "climbing") {
+
+    } else if (theme === "fossils") {
+
+    }
+
+    // Require a Node.js library called fs.js
+    const fs = require('fs')
+
+    // Read file
+    fs.readFile('themeFileSwordPlay.txt', (err, data) => {
+        if (err) throw err;
+
+        console.log(data.toString());
+    })
+
+}
