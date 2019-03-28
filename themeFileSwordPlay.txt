@@ -1,0 +1,8 @@
+prapier
+longsword
+fence
+parry
+counter
+thrust
+dagger
+

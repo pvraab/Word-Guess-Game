@@ -11,7 +11,7 @@
 	<!-- Add JQuery library -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-	<!-- Add Game javascript -->  
+	<!-- Add Game javascript -->
 	<script src="./assets/javascript/game.js"></script>
 
 
@@ -37,10 +37,34 @@
 				</div>
 			</div>
 
+			<form>
+				Select a Theme:
+				<select id="themeList" onchange="themeChanged()">
+
+					<option>SwordPlay</option>
+					<option>Climbing</option>
+					<option>Fossils</option>
+				</select>
+				<p>Current Theme: <input type="text" id="themeCurrent" size="20"></p>
+			</form>
+
+			<!-- Header with an id of click-me -->
+			<h3 id="click-me">CLICK ME!</h3>
+			<input type='file' accept='text/plain' onchange='openFile(event)'><br>
+
+
 		</div>
 
 		<div id="gameAction">
 			<h2>Game Action</h2>
+
+			<div id="canvasDiv">
+				<P>Progress</P>
+				<canvas id="canvasDrawing">
+					Your browser does not support the canvas element.
+				</canvas>
+			</div>
+
 		</div>
 
 	</div>
