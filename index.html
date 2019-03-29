@@ -52,6 +52,16 @@
 			<h3 id="click-me">CLICK ME!</h3>
 			<input type='file' accept='text/plain' onchange='openFile(event)'><br>
 
+			<!-- Game details - wins, losses, guesses left, letters used -->
+			<div id="gameDetails">
+
+				<h2>Press any key to get started</h2>
+				<h2>Wins: <span id="wins"><strong>...</strong></span></h2>
+				<h2>Losses: <span id="losses"><strong>...</strong></span></h2>
+				<h2>Guesses Left: <span id="guessesLeft"><strong>9</strong></span></h2>
+				<h2>Your Guesses so far: <span id="guessesSoFar"><strong></strong></span></h2>
+
+			</div>
 
 		</div>
 
@@ -63,6 +73,14 @@
 				<canvas id="canvasDrawing">
 					Your browser does not support the canvas element.
 				</canvas>
+			</div>
+
+			<!-- Word disply-->
+			<div id="wordDisplay1">
+				<h2 id="word"></h2>
+			</div>
+			<div id="wordDisplay2">
+				<h2 id="word_spaces"></h2>
 			</div>
 
 		</div>
