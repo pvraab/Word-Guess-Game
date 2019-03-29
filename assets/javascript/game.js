@@ -88,7 +88,7 @@ $(document).ready(function () {
             } else if (game.currentGuess === game.currentChars[i] && hitIt) {
                 wordObj.text = game.currentGuess;
                 countDown--;
-            }    
+            }
 
         }
 
@@ -157,11 +157,28 @@ function themeChanged() {
     // myElement.style.background-image = "./assets/images/";
     // myElement.classList.remove("gameManager");
     // document.getElementById("gameManager").style.color = "blue";
+
     if (themeList.options[themeList.selectedIndex].text === "SwordPlay") {
         document.getElementById("gameManager").style.fontFamily = "Gothic";
         document.getElementById("gameManager").style.backgroundImage = "url('https://mdbootstrap.com/img/Photos/Horizontal/Nature/full page/img(20).jpg')";
         document.getElementById("gameAction").style.backgroundImage = "url('https://mdbootstrap.com/img/Photos/Horizontal/Nature/full page/img(20).jpg')";
         document.getElementById("gameHeader").style.backgroundImage = "url('https://mdbootstrap.com/img/Photos/Horizontal/Nature/full page/img(20).jpg')";
+
+        // Read swordPlay word file
+        themeFileRead("swordPlay");
+        loadFile();
+
+        // Put movie into div
+        var x = document.createElement("VIDEO");
+
+        if (x.canPlayType("video/mp4")) {
+            x.setAttribute("src", "ThreeMusketeers.mp4");
+        }
+        x.setAttribute("width", "320");
+        x.setAttribute("height", "240");
+        x.setAttribute("controls", "controls");
+        document.getElementById("gameMovie").appendChild(x);
+
     } else if (themeList.options[themeList.selectedIndex].text === "Climbing") {
         document.getElementById("gameManager").style.fontFamily = "Arial";
         document.getElementById("gameManager").style.backgroundImage = "url('./assets/images/Tetons20040014.jpg')";
@@ -225,11 +242,19 @@ var openFile = function (event) {
 
     var reader = new FileReader();
     console.log(reader);
+    console.log(input.files[0]);
     reader.onload = function () {
         var text = reader.result;
         console.log(reader.result.substring(0, 200));
+        alert("Got the file.n" +
+            "name: " + input.files[0].name + "n" +
+            "type: " + input.files[0].type + "n" +
+            "size: " + input.files[0].size + " bytesn");
     };
     reader.readAsText(input.files[0]);
+    console.log(reader);
+    console.log(input.files[0]);
+
 };
 
 
@@ -244,8 +269,14 @@ function themeFileRead(theme) {
 
     }
 
+    if (window.File && window.FileReader && window.FileList && window.Blob) {
+        //do your stuff!
+    } else {
+        alert('The File APIs are not fully supported by your browser.');
+    }
+
     // Create a file object
-    var f = new File(["themeFileSwordPlay"], "themeFileSwordPlay.txt", {
+    var f = new File(["themeFileSwordPlay"], "./themeFileSwordPlay.txt", {
         type: "text/plain"
     });
     console.log(f);
@@ -253,12 +284,21 @@ function themeFileRead(theme) {
     // Create a FileReader object
     var reader = new FileReader();
     console.log(reader);
+    console.log(f);
 
     reader.onload = function () {
+        console.log("Inside onload");
         var text = reader.result;
         console.log(reader.result.substring(0, 200));
+        alert("Got the file.n" +
+            "name: " + f.name + "n" +
+            "type: " + f.type + "n" +
+            "size: " + f.size + " bytesn");
     };
     reader.readAsText(f);
+    console.log(reader);
+    console.log(f);
+}
 
 
     // reader.onload = function (evt) {
@@ -299,7 +339,50 @@ function themeFileRead(theme) {
     //     var text = reader.result;
     // }
 
-}
+
+// function LoadFile() {
+//     console.log("Inside LoadFile");
+//     var oFrame = document.getElementById("swordPlayFile");
+//     console.log(oFrame);
+//     var strRawContents = oFrame.contentWindow.document.body.childNodes[0].innerHTML;
+    // while (strRawContents.indexOf("\r") >= 0)
+    //     strRawContents = strRawContents.replace("\r", "");
+    // var arrLines = strRawContents.split("\n");
+    // alert("File " + oFrame.src + " has " + arrLines.length + " lines");
+    // for (var i = 0; i < arrLines.length; i++) {
+    //     var curLine = arrLines[i];
+    //     alert("Line #" + (i + 1) + " is: '" + curLine + "'");
+    // }
+// }
+
+// Synchronously read a text file from the web server with Ajax
+//
+// The filePath is relative to the web page folder.
+// Example:   myStuff = loadFile("Chuuk_data.txt");
+//
+// You can also pass a full URL, like http://sealevel.info/Chuuk1_data.json, but there
+// might be Access-Control-Allow-Origin issues. I found it works okay in Firefox, Edge,
+// or Opera, and works in IE 11 if the server is configured properly, but in Chrome it only
+// works if the domains exactly match (and note that "xyz.com" & "www.xyz.com" don't match).
+// Otherwise Chrome reports an error:
+//
+//   No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://sealevel.info' is therefore not allowed access.
+//
+// That happens even when "Access-Control-Allow-Origin *" is configured in .htaccess,
+// and even though I verified the headers returned (you can use a header-checker site like
+// http://www.webconfs.com/http-header-check.php to check it). I think it's a Chrome bug.
+// function loadFile() {
+//     var filePath = "./themeFileSwordPlay.txt"
+//     var result = null;
+//     var xmlhttp = new XMLHttpRequest();
+//     xmlhttp.open("GET", filePath, false);
+//     xmlhttp.send();
+//     if (xmlhttp.status==200) {
+//       result = xmlhttp.responseText;
+//     }
+//     console.log(result);
+//     // return result;
+//   }
 
 
 // Require a Node.js library called fs.js
