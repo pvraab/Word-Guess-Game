@@ -1,38 +1,34 @@
 $(document).ready(function () {
 
+    console.log("Start");
+
     // Define game object so it can be passed by reference to functions
     var game = {
         wins: 0,
         losses: 0,
-        guesses: 9,
+        guesses: 10,
         guessedLetters: [],
         guessedLettersHit: [],
         guessedLettersMiss: [],
         currentGuess: "",
         wordIndex: 0,
         currentWord: "",
+        countDown: 0,
         currentChars: [],
+        currentWordSpaces: [],
         currentTheme: "swordPlay",
         swordWords: ["rapier", "parry", "thrust"],
         climbingWords: ["rope", "belay", "piton"],
         fossilWords: ["trilobite", "cast", "mold"]
     }
 
+    // Draw gallows
+    drawGallows();
+    var bodyPart = 1;
+    drawBody(bodyPart);
 
     // Get initial computer word
-    game.wordIndex = Math.floor(Math.random() * game.swordWords.length);
-    game.currentWord = game.swordWords[game.wordIndex];
-    setUpWord();
-
-    console.log("CompWord " + game.currentWord);
-
-    // Break word down into characters
-    for (var i = 0; i < game.currentWord.length; i++) {
-        game.currentChars[i] = game.currentWord.charAt(i);
-    }
-    game.currentChars = game.currentWord.slice();
-    console.log("CompChars " + game.currentChars);
-
+    getWord();
 
     // Function to handle onkeydown event
     document.onkeydown = function (event) {
@@ -55,10 +51,14 @@ $(document).ready(function () {
             // Check if character already used
             for (var i = 0; i < game.guessedLetters.length; i++) {
                 if (event.key === game.guessedLetters[i]) {
+                    console.log("Return 1");
                     return;
                 }
             }
+
+            // Not a character
         } else {
+            console.log("Return 2");
             return;
         }
 
@@ -77,45 +77,107 @@ $(document).ready(function () {
 
         // Look for a match in word
         var hitIt = false;
-        var countDown = game.currentWord.length;
+        var hitOne = false;
+
+        // Cycle through all of the characters
         for (var i = 0; i < game.currentChars.length; i++) {
+
+            // Found a match - is first match
             if (game.currentGuess === game.currentChars[i] && !hitIt) {
                 game.guessedLettersHit.push(game.currentGuess);
                 hitIt = true;
-                countDown--;
+                hitOne = true;
+                game.countDown--;
+                console.log("Got a match " + game.currentGuess);
+
+                // Put good guess on screen
                 var wordObj = document.getElementById("word_spaces");
-                wordObj.text = game.currentGuess;
+                wordObj.textContent = "";
+                var icnt = 0;
+                console.log(game.currentWordSpaces + " " + game.currentWordSpaces.length);
+                var inString = wordObj.textContent;
+                var newString = inString.substring(0, icnt) + game.currentGuess + inString.substring(icnt + 1);
+                wordObj.textContent = newString;
+                // for (var j = 0; j < game.currentWordSpaces.length; j++) {
+                //     if (icnt === i) {
+                //         wordObj.textContent = wordObj.textContent + game.currentGuess;
+                //     } else {
+                //         wordObj.textContent = wordObj.textContent + "_";
+                //     }
+                //     icnt++;
+                // }
+
+                // Found a match is second or ... match
             } else if (game.currentGuess === game.currentChars[i] && hitIt) {
+                hitOne = true;
                 wordObj.text = game.currentGuess;
-                countDown--;
+                game.countDown--;
+
+                console.log("Got another match on same key " + game.currentGuess);
+
             }
 
         }
 
-        if (userKeyPress === game.compGuess) {
-            alert("You won!! - your guess = " + userKeyPress + " comp guess = " + game.compGuess)
-            game.guesses = 9;
-            game.wins++;
-            document.getElementById("guessesLeft").innerHTML = game.guesses;
-            document.getElementById("wins").innerHTML = game.wins;
-            $("#guessesSoFar").text("");
-            var i = Math.floor(Math.random() * 26);
-            game.compGuess = game.az[i]
-        } else if (game.guesses <= 1) {
-            alert("You lost - your guess = " + userKeyPress + " comp guess = " + game.compGuess)
-            game.guesses = 9;
+        // A wrong letter picked
+        if (!hitOne) {
+            game.guesses--;
+            console.log("Missed " + game.guesses);
+            var bodyPart = 10 - game.guesses;
+            console.log("Body part " + bodyPart);
+            drawBody(bodyPart);
+        }
+
+        // Put up all the guesses
+        $("#guessesSoFar").append(" " + game.currentGuess);
+
+        // Check for a loss
+        if (game.guesses <= 0) {
+            alert("You lost - word was " + game.currentWord);
             game.losses++;
+
+            // Reset everyone
+            game.guesses = 10;
             document.getElementById("guessesLeft").innerHTML = game.guesses;
             document.getElementById("losses").innerHTML = game.losses;
             $("#guessesSoFar").text("");
-            var i = Math.floor(Math.random() * 26);
-            game.compGuess = game.az[i];
-        } else {
-            game.guesses--;
-            document.getElementById("guessesLeft").innerHTML = game.guesses;
-            $("#guessesSoFar").append(" " + userKeyPress);
+            getWord();
         }
+
+
+        // Check for a win
+        if (game.countDown === 0) {
+            alert("You won!! - word is " + game.currentWord);
+            game.wins++;
+
+            // Reset everyone
+            game.guesses = 10;
+            document.getElementById("guessesLeft").innerHTML = game.guesses;
+            document.getElementById("wins").innerHTML = game.wins;
+            $("#guessesSoFar").text("");
+            getWord();
+
+        }
+
     };
+
+    // Get word
+    function getWord() {
+        game.wordIndex = Math.floor(Math.random() * game.swordWords.length);
+        game.currentWord = game.swordWords[game.wordIndex];
+        setUpWord();
+
+        console.log("CompWord " + game.currentWord);
+
+        // Break word down into characters
+        for (var i = 0; i < game.currentWord.length; i++) {
+            game.currentChars[i] = game.currentWord.charAt(i);
+        }
+        // game.currentChars = game.currentWord.slice();
+        console.log("CompChars " + game.currentChars);
+        game.countDown = game.currentWord.length;
+
+    }
 
     // Setup display for new word
     function setUpWord() {
@@ -129,8 +191,10 @@ $(document).ready(function () {
         var wordObj = document.getElementById("word_spaces");
         console.log(wordObj);
         var word_spaces = "";
+        game.currentWordSpaces = [];
         for (var i = 0; i < game.currentWord.length; i++) {
-            word_spaces = word_spaces + " _";
+            word_spaces = word_spaces + "_";
+            game.currentWordSpaces.push("_");
         }
         wordObj.textContent = word_spaces;
 
@@ -166,7 +230,7 @@ function themeChanged() {
 
         // Read swordPlay word file
         themeFileRead("swordPlay");
-        loadFile();
+        // loadFile();
 
         // Put movie into div
         var x = document.createElement("VIDEO");
@@ -190,7 +254,6 @@ function themeChanged() {
         document.getElementById("gameAction").style.backgroundImage = "url('./assets/images/ricepaper_v3.jpg')";
         document.getElementById("gameHeader").style.backgroundImage = "url('./assets/images/ricepaper_v3.jpg')";
     }
-    drawFunction();
 }
 
 // Close the dropdown if the user clicks outside of it
@@ -300,102 +363,103 @@ function themeFileRead(theme) {
     console.log(f);
 }
 
-
-    // reader.onload = function (evt) {
-    // document.body.innerHTML = evt.target.result + "<br><a href=" + URL.createObjectURL(file) + " download=" + file.name + ">Download " + file.name + "</a><br>type: " + file.type + "<br>last modified: " + file.lastModifiedDate
-    // }
-    // reader.onload = function () {
-    //     var text = reader.result; // display file contents
-    //     console.log(text);
-    // }
-
-    // reader.readAsDataURL(f);
-    // // reader.read.readAsText(f);
-    // // reader.readAsArrayBuffer(f);
-    // var words = reader.result;
-    // console.log("Words ");
-    // console.log(words);
-    // var words = reader.result;
-    // console.log("Words ");
-    // console.log(words);
-    // var words = reader.result;
-    // console.log("Words ");
-    // console.log(words);
-
-
-    // reader.readAsText("themeFileSwordPlay.txt");
-
-    // var names = read("themeFileSwordPlay.txt").split("\n");
-    // for (var i = 0; i < names.length; ++i) {
-    //     names[i] = names[i].trim();
-    //     console.log(names[i]);
-    // }
-
-    // var reader = new FileReader();
-    // reader.readAsText("themeFileSwordPlay.txt");
-    // var text = reader.result;
-    // console.log(text);
-    // reader.onload = function (e) {
-    //     var text = reader.result;
-    // }
-
-
-// function LoadFile() {
-//     console.log("Inside LoadFile");
-//     var oFrame = document.getElementById("swordPlayFile");
-//     console.log(oFrame);
-//     var strRawContents = oFrame.contentWindow.document.body.childNodes[0].innerHTML;
-    // while (strRawContents.indexOf("\r") >= 0)
-    //     strRawContents = strRawContents.replace("\r", "");
-    // var arrLines = strRawContents.split("\n");
-    // alert("File " + oFrame.src + " has " + arrLines.length + " lines");
-    // for (var i = 0; i < arrLines.length; i++) {
-    //     var curLine = arrLines[i];
-    //     alert("Line #" + (i + 1) + " is: '" + curLine + "'");
-    // }
-// }
-
-// Synchronously read a text file from the web server with Ajax
-//
-// The filePath is relative to the web page folder.
-// Example:   myStuff = loadFile("Chuuk_data.txt");
-//
-// You can also pass a full URL, like http://sealevel.info/Chuuk1_data.json, but there
-// might be Access-Control-Allow-Origin issues. I found it works okay in Firefox, Edge,
-// or Opera, and works in IE 11 if the server is configured properly, but in Chrome it only
-// works if the domains exactly match (and note that "xyz.com" & "www.xyz.com" don't match).
-// Otherwise Chrome reports an error:
-//
-//   No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://sealevel.info' is therefore not allowed access.
-//
-// That happens even when "Access-Control-Allow-Origin *" is configured in .htaccess,
-// and even though I verified the headers returned (you can use a header-checker site like
-// http://www.webconfs.com/http-header-check.php to check it). I think it's a Chrome bug.
-// function loadFile() {
-//     var filePath = "./themeFileSwordPlay.txt"
-//     var result = null;
-//     var xmlhttp = new XMLHttpRequest();
-//     xmlhttp.open("GET", filePath, false);
-//     xmlhttp.send();
-//     if (xmlhttp.status==200) {
-//       result = xmlhttp.responseText;
-//     }
-//     console.log(result);
-//     // return result;
-//   }
-
-
-// Require a Node.js library called fs.js
-// const fs = require('fs')
-
-// Read file
-// fs.readFile('themeFileSwordPlay.txt', (err, data) => {
-// if (err) throw err;
-// 
-// console.log(data.toString());
-// })
-
 // Draw gallows
+function drawGallows() {
+
+    //  Get graphics context
+    var canvas = document.getElementById("canvasDrawing");
+    var ctx = canvas.getContext("2d");
+
+    // Build a gallows
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, 10, 200);
+    ctx.fillRect(0, 0, 100, 5);
+    ctx.fillRect(100, 0, 10, 20);
+}
+
+// Draw a body
+function drawBody(bodyPart) {
+
+    //  Get graphics context
+    var canvas = document.getElementById("canvasDrawing");
+    var ctx = canvas.getContext("2d");
+
+    //  Put a head on it
+    if (bodyPart === 1 || bodyPart === 0) {
+        ctx.strokeStyle = "#000000";
+        ctx.beginPath();
+        ctx.arc(105, 30, 10, 0, 2 * Math.PI);
+        ctx.stroke();
+    }
+
+    //  Put a body on it
+    if (bodyPart === 2 || bodyPart === 0) {
+        ctx.moveTo(105, 40);
+        ctx.lineTo(105, 75);
+        ctx.stroke();
+    }
+
+    //  Put a left arm on it
+    if (bodyPart === 3 || bodyPart === 0) {
+        ctx.moveTo(105, 45);
+        ctx.lineTo(120, 55);
+        ctx.stroke();
+    }
+
+    //  Put a right arm on it
+    if (bodyPart === 4 || bodyPart === 0) {
+        ctx.moveTo(105, 45);
+        ctx.lineTo(90, 55);
+        ctx.stroke();
+    }
+
+    //  Put a left leg on it
+    if (bodyPart === 5 || bodyPart === 0) {
+        ctx.moveTo(105, 75);
+        ctx.lineTo(120, 95);
+        ctx.stroke();
+    }
+
+    //  Put a right leg on it
+    if (bodyPart === 6 || bodyPart === 0) {
+        ctx.moveTo(105, 75);
+        ctx.lineTo(90, 95);
+        ctx.stroke();
+    }
+
+    //  Put a left hand on it
+    if (bodyPart === 7 || bodyPart === 0) {
+        ctx.moveTo(120, 55);
+        ctx.lineTo(125, 45);
+        ctx.stroke();
+    }
+
+    //  Put a right hand on it
+    if (bodyPart === 8 || bodyPart === 0) {
+        ctx.moveTo(90, 55);
+        ctx.lineTo(85, 45);
+        ctx.stroke();
+    }
+
+    //  Put a left foot on it
+    if (bodyPart === 9 || bodyPart === 0) {
+        ctx.moveTo(120, 95);
+        ctx.lineTo(130, 95);
+        ctx.stroke();
+    }
+
+    //  Put a right foot on it
+    if (bodyPart === 10 || bodyPart === 0) {
+        ctx.moveTo(90, 95);
+        ctx.lineTo(80, 95);
+        ctx.stroke();
+    }
+
+}
+
+
+
+
 function drawFunction() {
     console.log("draw function");
     var canvas = document.getElementById("canvasDrawing");
@@ -417,28 +481,4 @@ function drawFunction() {
     ctx.fillRect(0, 0, 10, 200);
     ctx.fillRect(0, 0, 50, 10);
     ctx.fillRect(40, 10, 10, 10);
-}
-
-function drawBody() {
-
-    //  Put a head on it
-    ctx.beginPath();
-    ctx.arc(45, 25, 10, 0, 2 * Math.PI);
-    ctx.stroke();
-
-    //  Put a body on it
-    ctx.moveTo(45, 45);
-    ctx.lineTo(45, 75);
-    ctx.stroke();
-
-    //  Put a left arm on it
-    ctx.moveTo(45, 45);
-    ctx.lineTo(55, 55);
-    ctx.stroke();
-
-    //  Put a right arm on it
-    ctx.moveTo(45, 45);
-    ctx.lineTo(55, 55);
-    ctx.stroke();
-
 }
