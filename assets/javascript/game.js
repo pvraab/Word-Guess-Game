@@ -61,6 +61,11 @@ $(document).ready(function () {
         document.getElementById("losses").innerHTML = game.losses;
         $("#guessesSoFar").text("");
 
+        // Reset clue object
+        var wordObj = document.getElementById("word_test");
+        wordObj.textContent = "Click for word!";
+
+
         // Get first word
         getWord();
 
@@ -96,7 +101,7 @@ $(document).ready(function () {
     // Setup display for new word
     function setUpWord() {
 
-        var debugOn = true;
+        var debugOn = false;
         if (debugOn) {
             var wordObj = document.getElementById("word_test");
             wordObj.textContent = game.currentWord;
@@ -275,6 +280,11 @@ $(document).ready(function () {
         video.play();
         video.setAttribute("controls", "controls");
     }
+
+    $(word_test).on("click", function () {
+        var wordObj = document.getElementById("word_test");
+        wordObj.textContent = game.currentWord;
+    });
 
     // Close the dropdown if the user clicks outside of it
     window.onclick = function (event) {
