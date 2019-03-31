@@ -24,8 +24,7 @@ $(document).ready(function () {
 
     // Draw gallows
     drawGallows();
-    var bodyPart = 1;
-    drawBody(bodyPart);
+    console.log("draw gallows");
 
     // Get initial computer word
     getWord();
@@ -44,6 +43,7 @@ $(document).ready(function () {
         // Get the user key press
         var userKeyCode = String.fromCharCode(event.keyCode);
         var userKeyPress = event.key;
+        console.log("game.guessedLetters.length " + game.guessedLetters.length);
 
         // Is it a valid letter
         // Make sure it is lowercase
@@ -51,7 +51,7 @@ $(document).ready(function () {
             // Check if character already used
             for (var i = 0; i < game.guessedLetters.length; i++) {
                 if (event.key === game.guessedLetters[i]) {
-                    console.log("Return 1");
+                    console.log("Return 1 " + event.key);
                     return;
                 }
             }
@@ -92,11 +92,13 @@ $(document).ready(function () {
 
                 // Put good guess on screen
                 var wordObj = document.getElementById("word_spaces");
-                wordObj.textContent = "";
-                var icnt = 0;
+                // var icnt = 0;
                 console.log(game.currentWordSpaces + " " + game.currentWordSpaces.length);
                 var inString = wordObj.textContent;
-                var newString = inString.substring(0, icnt) + game.currentGuess + inString.substring(icnt + 1);
+                console.log("In String " + inString);
+                console.log("1st sub " + inString.substring(0, i));
+                console.log("2nd sub " + inString.substring(i + 1));
+                var newString = inString.substring(0, i) + game.currentGuess + inString.substring(i + 1);
                 wordObj.textContent = newString;
                 // for (var j = 0; j < game.currentWordSpaces.length; j++) {
                 //     if (icnt === i) {
@@ -114,6 +116,10 @@ $(document).ready(function () {
                 game.countDown--;
 
                 console.log("Got another match on same key " + game.currentGuess);
+                var wordObj = document.getElementById("word_spaces");
+                var inString = wordObj.textContent;
+                var newString = inString.substring(0, i) + game.currentGuess + inString.substring(i + 1);
+                wordObj.textContent = newString;
 
             }
 
@@ -136,6 +142,11 @@ $(document).ready(function () {
             alert("You lost - word was " + game.currentWord);
             game.losses++;
 
+            clearCanvas();
+
+            // Draw gallows
+            drawGallows();
+
             // Reset everyone
             game.guesses = 10;
             document.getElementById("guessesLeft").innerHTML = game.guesses;
@@ -147,13 +158,22 @@ $(document).ready(function () {
 
         // Check for a win
         if (game.countDown === 0) {
-            alert("You won!! - word is " + game.currentWord);
             game.wins++;
 
             // Reset everyone
             game.guesses = 10;
+            game.guessedLetters = [];
+            game.currentChars = [];
+            game.guessedLettersHit = [];
+
+            clearCanvas();
+
+            // Draw gallows
+            drawGallows();
+
             document.getElementById("guessesLeft").innerHTML = game.guesses;
             document.getElementById("wins").innerHTML = game.wins;
+            alert("You won!! - word is " + game.currentWord);
             $("#guessesSoFar").text("");
             getWord();
 
@@ -457,7 +477,14 @@ function drawBody(bodyPart) {
 
 }
 
+function clearCanvas() {
 
+    //  Get graphics context
+    var canvas = document.getElementById("canvasDrawing");
+    var ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+}
 
 
 function drawFunction() {
