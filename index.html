@@ -24,49 +24,34 @@
 	</header>
 
 	<div id="gameDiv">
-
 		<div id="gameManager">
-			<h2>Game Manager</h2>
 
-			<div class="dropdown">
-				<button onclick="themeFunction()" class="dropbtn">Choose Theme</button>
-				<div id="themeDropdown" class="dropdown-content">
-					<a href="#swordPlay">SwordPlay</a>
-					<a href="#climbing">Climbing</a>
-					<a href="#fossils">Fossils</a>
-				</div>
-			</div>
+			<h2>Game Manager</h2>
 
 			<form>
 				Select a Theme:
 				<select id="themeList" onchange="themeChanged()">
-
 					<option>SwordPlay</option>
 					<option>Climbing</option>
 					<option>Fossils</option>
 				</select>
-				<p>Current Theme: <input type="text" id="themeCurrent" size="20"></p>
 			</form>
-
-			<!-- Header with an id of click-me -->
-			<h3 id="click-me">CLICK ME!</h3>
-			<input type='file' accept='text/plain' onchange='openFile(event)'><br>
 
 			<!-- Game details - wins, losses, guesses left, letters used -->
 			<div id="gameDetails">
+				<h2 id="alertMessage"></h2>
 
 				<h2>Press any key to get started</h2>
 				<h2>Wins: <span id="wins"><strong>...</strong></span></h2>
 				<h2>Losses: <span id="losses"><strong>...</strong></span></h2>
-				<h2>Guesses Left: <span id="guessesLeft"><strong>9</strong></span></h2>
+				<h2>Guesses Left: <span id="guessesLeft"><strong></strong></span></h2>
 				<h2>Your Guesses so far: <span id="guessesSoFar"><strong></strong></span></h2>
 
 			</div>
 
 			<!-- Game Movie -->
 			<div id="gameMovie">
-
-
+				<video id="video" width="350" height="240"></video>
 			</div>
 
 		</div>
@@ -83,11 +68,16 @@
 
 			<!-- Word disply-->
 			<div id="wordDisplay1">
-				<h2 id="word"></h2>
+				<h2 id="word_test"></h2>
 			</div>
 			<div id="wordDisplay2">
 				<h2 id="word_spaces"></h2>
 			</div>
+
+			<audio id="gameAudio">
+
+			</audio>
+
 
 		</div>
 
