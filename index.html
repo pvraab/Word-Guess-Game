@@ -1,3 +1,8 @@
+<!-- HTML for Bootcamp Homework #3 -->
+<!-- Paul Raab -->
+<!-- Raab Enterprises LLC -->
+<!-- 4/12/2019 -->
+<!-- ## Harder Assignment - Building a Word Guess Game (Hangman) -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,10 +29,13 @@
 	</header>
 
 	<div id="gameDiv">
+
+		<!-- Game manager section -->
 		<div id="gameManager">
 
 			<h2>Game Manager</h2>
 
+			<!-- Use a form to select a theme -->
 			<form>
 				Select a Theme:
 				<select id="themeList" onchange="themeChanged()">
@@ -56,9 +64,11 @@
 
 		</div>
 
+		<!-- Section managing individual game action -->
 		<div id="gameAction">
 			<h2>Game Action</h2>
 
+			<!-- Section for drawing hangman -->
 			<div id="canvasDiv">
 				<P>Progress</P>
 				<canvas id="canvasDrawing">
@@ -66,14 +76,17 @@
 				</canvas>
 			</div>
 
-			<!-- Word disply-->
+			<!-- Word display of computer word - can see if hint wanted-->
 			<div id="wordDisplay1">
 				<h2 id="word_test">Click for word!</h2>
 			</div>
+
+			<!-- Word display of active word - spaces and letters guessed-->
 			<div id="wordDisplay2">
 				<h2 id="word_spaces"></h2>
 			</div>
 
+			<!-- Put in audio for a win -->
 			<audio id="gameAudio">
 
 			</audio>
@@ -83,12 +96,7 @@
 
 	</div>
 
-	<!-- Read files on server -->
-	<!-- <iframe id="swordPlayFile" src="./themeFileSwordPlay.txt" onload="LoadFile();" style="display: none;"></iframe> -->
-	<!-- <iframe id="fossilsFile" src="./fossilsTheme.txt" onload="LoadFile();" style="display: none;"></iframe>
-	<iframe id="climbingFile" src="./climbingTheme.txt" onload="LoadFile();" style="display: none;"></iframe> -->
-
-
+	<!-- Need to finish footer -->
 	<footer>
 
 	</footer>

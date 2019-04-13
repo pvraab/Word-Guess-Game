@@ -1,3 +1,8 @@
+// JavaScript for Bootcamp Homework #3
+// Paul Raab
+// Raab Enterprises LLC
+// 4/12/2019
+// ## Harder Assignment - Building a Word Guess Game (Hangman)
 $(document).ready(function () {
 
     // JavaScript version
